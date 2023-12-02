@@ -1,0 +1,11 @@
+from fastapi import FastAPI, HTTPException
+from mongoengine import Document, connect, StringField
+from typing import List
+
+
+class LoginModel(Document):
+    email = StringField(required=True, unique=True, lowercase=True, trim=True)
+    password = StringField(required=True, trim=True)
+    firstName = StringField(required=True, trim=True)
+    lastName = StringField(trim=True)
+

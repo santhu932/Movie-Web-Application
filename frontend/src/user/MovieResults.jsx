@@ -1,0 +1,78 @@
+import React, { useEffect } from 'react';
+import { useContext } from 'react';
+import MovieContext from '../components/context/MovieContext';
+import MovieRating from './MovieRating.jsx';
+import MovieCarousel from './MovieCarousel.jsx';
+import { useNavigate } from 'react-router-dom';
+import { Typography } from '@mui/material';
+import noimg from '../components/images/noimg.jpg';
+//import { getHomeMovies } from '../../services/moviesApi'; // Replace with your movie API service
+
+function MovieResults() {
+  const { sampleData, setSampleData, login, landing } = useContext(MovieContext);
+
+  useEffect(() => {
+    fetchData();
+  }, [landing]);
+
+  const fetchData = async () => {
+    // const data = await getHomeMovies(); // Replace with your movie API service
+    // setSampleData(data);
+  };
+
+  const navigate = useNavigate();
+  const handleClick = (id) => {
+    console.log('clicked', id);
+    navigate(`/movie/${id}`);
+  };
+
+  return (
+    <>
+      <Typography variant="h2" className="text-center" sx={{ my: 2 }}>
+        Top Rated Movies
+      </Typography>
+      {login && <MovieCarousel />}
+      {landing && (
+        <div className="grid grid-cols-1 gap-20 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2">
+          {sampleData.map((movie) => (
+            <div
+              className="transform transition duration-500 hover:scale-125 hover:flex justify-center items-center"
+              key={movie._id}
+              onClick={() => handleClick(movie._id)}
+            >
+              <div className="card-body bg-neutral rounded p-4 justify-center">
+                <div className="card-title font-bold justify-center">
+                  {movie.title}
+                </div>
+                <div className="flex flex-col items-center ">
+                  <div className="bg-auto md-4 flex-grow ">
+                    {movie.imageLink === 'No Image Available!' ? (
+                      <img src={noimg} alt="movie" className="bg-auto" />
+                    ) : (
+                      <img src={movie.imageLink} alt="movie" className="bg-auto" />
+                    )}
+                  </div>
+                  <div className="flex flex-col justify-between m-2 ">
+                    <div className="platform">
+                      <div className="font-bold">Genre: {movie.genre}</div>
+                    </div>
+                    <div className="year">
+                      <div className="font-bold">
+                        Year of Release: {movie.year}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="rating mt-1">
+                    <MovieRating imdb_score={movie.imdb_score} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  );
+}
+
+export default MovieResults;
