@@ -64,7 +64,9 @@ export default function SignIn() {
 
     try {
       // Replace the placeholder with the actual movie authentication endpoint
-      const { status } = await axios.get(`${url}/usersValidate`, reqBody);
+      const { status } = await axios.get(`${url}/usersValidate`, {
+        params: reqBody,
+      });
       if (status === 200) {
         setIsauthenticated(true);
       }

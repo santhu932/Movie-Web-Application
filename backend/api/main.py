@@ -8,6 +8,9 @@ from urllib.parse import quote_plus
 from pymongo import MongoClient
 from bson import ObjectId
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Request
+import traceback
+
 
 import re
 app = FastAPI()
@@ -123,7 +126,6 @@ async def get_users():
     
 @app.get("/usersValidate", response_model=List[loginModel])
 async def get_users(email: str, password: str):
-    print("Hi1:", email, password)
     try: 
         if email and password:
                 client = make_connection()
@@ -132,7 +134,7 @@ async def get_users(email: str, password: str):
                 print("Hi1:", email, password)
                 
                 # Assuming LoginModel has a find_one method
-                user = await collection_users.find_one({"email": email, "password": password})
+                user = collection_users.find_one({"email": email, "password": password})
                 if user:
                     return user
                 else:
@@ -140,24 +142,26 @@ async def get_users(email: str, password: str):
         else:
             raise HTTPException(status_code=400, detail="Email or Password missing!")
     except Exception as error:
-        raise HTTPException(status_code=402, detail=f'Error while trying to validate user: {str(error)}')   
-
-@app.get("/users/{email}", response_model=loginModel)
-async def get_user(email: str):
-    try:
-
-        client = make_connection()
-        db = client["MovieIndustryAnalysis"]
-        collection_users = db["users"]
-
-        # Assuming LoginModel has a find_one method
-        user = await collection_users.find_one({"email": email})
-        if user:
-            return user
-        else:
-            raise HTTPException(status_code=404, detail="User not found")
-    except Exception as error:
+        print(f"Error in get_users: {error}")
+        traceback.print_exc()  # Print the traceback for detailed error information
         raise HTTPException(status_code=500, detail=f'Internal server error: {str(error)}')
+
+# @app.get("/users/{email}", response_model=loginModel)
+# async def get_user(email: str):
+#     try:
+
+#         client = make_connection()
+#         db = client["MovieIndustryAnalysis"]
+#         collection_users = db["users"]
+
+#         # Assuming LoginModel has a find_one method
+#         user = await collection_users.find_one({"email": email})
+#         if user:
+#             return user
+#         else:
+#             raise HTTPException(status_code=404, detail="User not found")
+#     except Exception as error:
+#         raise HTTPException(status_code=500, detail=f'Internal server error: {str(error)}')
 
 
 
