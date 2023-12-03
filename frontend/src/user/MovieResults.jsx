@@ -6,7 +6,7 @@ import MovieCarousel from './MovieCarousel.jsx';
 import { useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import noimg from '../components/images/noimg.jpg';
-//import { getHomeMovies } from '../../services/moviesApi'; // Replace with your movie API service
+import { getHomeMovies } from '/Users/kumud/ADTFinalProject/Movie-Analysis/frontend/src/services/moviesApi.js'; // Replace with your movie API service
 
 function MovieResults() {
   const { sampleData, setSampleData, login, landing } = useContext(MovieContext);
@@ -16,8 +16,8 @@ function MovieResults() {
   }, [landing]);
 
   const fetchData = async () => {
-    // const data = await getHomeMovies(); // Replace with your movie API service
-    // setSampleData(data);
+    const data = await getHomeMovies(); // Replace with your movie API service
+    setSampleData(data);
   };
 
   const navigate = useNavigate();
@@ -46,10 +46,10 @@ function MovieResults() {
                 </div>
                 <div className="flex flex-col items-center ">
                   <div className="bg-auto md-4 flex-grow ">
-                    {movie.imageLink === 'No Image Available!' ? (
+                    {movie.Poster === 'No Image Available!' ? (
                       <img src={noimg} alt="movie" className="bg-auto" />
                     ) : (
-                      <img src={movie.imageLink} alt="movie" className="bg-auto" />
+                      <img src={movie.Poster} alt="movie" className="bg-auto" />
                     )}
                   </div>
                   <div className="flex flex-col justify-between m-2 ">
@@ -58,7 +58,7 @@ function MovieResults() {
                     </div>
                     <div className="year">
                       <div className="font-bold">
-                        Year of Release: {movie.year}
+                        Year of Release: {movie.released_year}
                       </div>
                     </div>
                   </div>
