@@ -55,8 +55,8 @@ class UserValidate(BaseModel):
 class loginModel(BaseModel):  # Assuming you have a LoginModel defined
     email: str
     password: str
-    firstName: str
-    lastName: str
+    first_name: str
+    last_name: str
 
 class UserResponse(BaseModel):
     message: str
@@ -134,9 +134,10 @@ async def get_users(email: str, password: str):
                 print("Hi1:", email, password)
                 
                 # Assuming LoginModel has a find_one method
-                user = collection_users.find_one({"email": email, "password": password})
+                user = await collection_users.find_one({"email": email, "password": password}, {"_id": 0})
+                print(user)
                 if user:
-                    return user
+                    return [user]
                 else:
                     raise HTTPException(status_code=401, detail="Invalid email or password!")
         else:
