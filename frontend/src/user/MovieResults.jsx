@@ -15,10 +15,20 @@ function MovieResults() {
     fetchData();
   }, [landing]);
 
+  // const fetchData = async () => {
+  //   const data = await getHomeMovies(); // Replace with your movie API service
+  //   setSampleData(data);
+  // };
   const fetchData = async () => {
-    const data = await getHomeMovies(); // Replace with your movie API service
-    setSampleData(data);
+    try {
+      const data = await getHomeMovies();
+      console.log('Data:', data);
+      setSampleData(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
+  
 
   const navigate = useNavigate();
   // const handleClick = (id) => {
@@ -27,14 +37,14 @@ function MovieResults() {
   // };
   const handleClick = (movie_id) => {
     console.log('clicked', movie_id);
-    navigate(`/movie/${movie_id}`);
+    navigate(`/movies`);
   };
   
   
   return (
     <>
       <Typography variant="h2" className="text-center" sx={{ my: 2 }}>
-        Movies
+       Top Rated Movies
       </Typography>
       {login && <MovieCarousel />}
       {landing && (

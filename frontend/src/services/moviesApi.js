@@ -15,12 +15,22 @@ const getHomeMovies = async () => {
   }
 };
 
-const getMovieDetail = async (id) => {
+// const getMovieDetail = async (id) => {
+//   try {
+//     const { data } = await axios.get(`${baseURI}/movie/${id}`);
+//     return data;
+//   } catch (error) {
+//     console.log('Error occurred!', error);
+//   }
+// };
+const getMovieDetail = async (movieId) => {
   try {
-    const { data } = await axios.get(`${baseURI}/movie/${id}`);
+    const { data } = await axios.get(`${baseURI}/movie/${movieId}`);
     return data;
   } catch (error) {
     console.log('Error occurred!', error);
+    // Handle the error as needed
+    throw error; // You might want to rethrow the error to let the calling code handle it
   }
 };
 

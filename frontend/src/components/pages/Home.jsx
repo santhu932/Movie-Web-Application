@@ -19,7 +19,7 @@ import MovieContext from '../context/MovieContext.jsx';
 import MovieResults from '../../user/MovieResults';
 
 function Home() {
-  const { search, login } = useContext(MovieContext);
+  const { login } = useContext(MovieContext);
 
   return (
     <>
