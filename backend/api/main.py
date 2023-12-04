@@ -183,7 +183,7 @@ async def get_users(email: str, password: str):
 
 
 class MovieThumbnail(BaseModel):
-    _id: str
+    id: str
     title: str
     genre: str
     released_year: int
@@ -220,7 +220,8 @@ async def get_all_movies():
         collection_users = db["users"]
 
         # Retrieve movies from MongoDB
-        movies_cursor = collection_movies.find()
+        movies_cursor = collection_movies.find().limit(20)
+        #print(movies_cursor)
         
         movies = await movies_cursor.to_list(length=None)
         response = await append_movie_thumbnail(movies)
@@ -233,7 +234,7 @@ async def get_movie(movie_id: str):
     try:
         if not movie_id:
             raise HTTPException(status_code=400, detail='Bad request! Movie id required!')
-
+        print("Movie id:", movie_id)
         # Connect to MongoDB
         client = make_connection()
         db = client["MovieIndustryAnalysis"]
@@ -276,7 +277,7 @@ async def append_movie_thumbnail(db_response):
     updated_response = []
     for movie in db_response:
         response = MovieThumbnail(
-            _id=str(movie.get('_id')),
+            id=str(movie.get('_id')),
             title=movie.get('title'),
             genre=movie.get('genre'),
             released_year=movie.get('released_year'),

@@ -7,6 +7,7 @@ import { MovieProvider } from './components/context/MovieContext.jsx'
 import SignIn from './components/pages/Signin.jsx'
 import SignUp from './components/pages/Signup.jsx'
 import Logout from './components/pages/Logout.jsx'
+import Details from './components/pages/Details.jsx'
 
 
 function App() {
@@ -32,7 +33,7 @@ function App() {
               />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/logout" element={<Logout />} />
-              {/* <Route path="/game/:id" element={<Details />} /> */}
+              <Route path="/movie/:id" element={<Details />} />
             </Routes>
           </main>
 

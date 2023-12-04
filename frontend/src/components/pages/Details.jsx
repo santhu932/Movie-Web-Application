@@ -8,10 +8,10 @@ import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import ScoreSharpIcon from '@mui/icons-material/ScoreSharp';
-import '/Users/kumud/ADTFinalProject/Movie-Analysis/frontend/src/Dash.css';
+import '../../Dash.css';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { getMovieDetail } from '../services/moviesApi.js';
+import { getMovieDetail } from '../../services/moviesApi.js';
 
 export default function Details() {
   const { id } = useParams();
@@ -85,19 +85,55 @@ export default function Details() {
                   </div>
                 </Stack>
               </Card>
-              
-              <Card sx={{ height: '9vh' }} className="gradinetbottom">
-                <Stack spacing={2} direction="row">
-                  <div className="iconstyle">
-                    <SportsEsportsIcon />
-                  </div>
-                  <div className="paddingall">
-                    <span className="pricesubtitle">Year of Release</span>
-                    <br />
-                    <span className="pricetitle">{movieDetail.released_year}</span>
-                  </div>
-                </Stack>
-              </Card>
+              <Stack spacing={2} direction="row">
+                <Card sx={{ minWidth: '49%' }} className="gradinet">
+                  <CardContent>
+                    <div className="iconstyle1">
+                      <ScoreSharpIcon />
+                    </div>
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      sx={{ color: '#ffffff' }}
+                    >
+                      {movieDetail.User_Score}
+                    </Typography>
+                    <Typography
+                      gutterBottom
+                      variant="body2"
+                      component="div"
+                      sx={{ color: '#ccd1d1' }}
+                    >
+                      User Rating
+                    </Typography>
+                  </CardContent>
+                </Card>
+                <Card sx={{ minWidth: '49%' }} className="gradinetlight">
+                  <CardContent>
+                    <div className="iconstyle1">
+                      {' '}
+                      <ScoreSharpIcon />
+                    </div>
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      sx={{ color: '#ffffff' }}
+                    >
+                      {movieDetail.Critic_Score}
+                    </Typography>
+                    <Typography
+                      gutterBottom
+                      variant="body2"
+                      component="div"
+                      sx={{ color: '#ccd1d1' }}
+                    >
+                      Critic Rating
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Stack>
             </Stack>
           </Grid>
         </Grid>
