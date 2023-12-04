@@ -273,6 +273,78 @@ async def get_movie(movie_id: str):
         print(error)
         raise HTTPException(status_code=500, detail=f'Internal server error: {str(error)}')
 
+
+from typing import List
+
+@app.get('/top_movies/{n}', response_model=List[MovieResponse])
+async def get_top_movies(n: int):
+    try:
+        if n <= 0:
+            raise HTTPException(status_code=400, detail='Bad request! n should be a positive integer.')
+
+        client = make_connection()
+        db = client["MovieIndustryAnalysis"]
+        collection_movies = db["movies"]
+
+        top_movies = await get_top_movies_from_database(collection_movies, n)
+
+        if not top_movies:
+            raise HTTPException(status_code=404, detail='Top movies not found')
+
+        response_movies = [
+            MovieResponse(
+                title=movie.get('title'),
+                rating=movie.get('rating'),
+                genre=movie.get('genre'),
+                released_year=movie.get('released_year'),
+                imdb_score=movie.get('imdb_score'),
+                imdb_votes=movie.get('imdb_votes'),
+                director=movie.get('director'),
+                writer=movie.get('writer'),
+                star=movie.get('star'),
+                country=movie.get('country'),
+                budget=movie.get('budget'),
+                revenue=movie.get('revenue'),
+                production_company=movie.get('production_company'),
+                duration=movie.get('duration'),
+                released_date=movie.get('released_date'),
+                released_country=movie.get('released_country'),
+                Poster=movie.get('Poster'),
+            )
+            for movie in top_movies
+        ]
+
+        return response_movies
+
+    except Exception as error:
+        print(error)
+        raise HTTPException(status_code=500, detail=f'Internal server error: {str(error)}')
+
+
+async def get_top_movies_from_database(collection, n):
+    try:
+        pipeline = [
+            {"$sort": {"imdb_score": -1}},  # Sort by imdb_score in descending order
+            {"$limit": n}  # Limit the number of results to 'n'
+        ]
+        client = make_connection()
+        db = client["MovieIndustryAnalysis"]
+        collection_movies = db["movies"]
+
+        top_movies_cursor = await collection_movies.aggregate(pipeline).to_list(length=n)
+
+        # Convert ObjectId to str for JSON serialization
+        top_movies = [
+            {**movie, "_id": str(movie["_id"])} for movie in top_movies_cursor
+        ]
+
+        return top_movies
+
+    except Exception as error:
+        print(f"Error fetching top movies: {error}")
+        raise
+
+
 async def append_movie_thumbnail(db_response):
     updated_response = []
     for movie in db_response:
