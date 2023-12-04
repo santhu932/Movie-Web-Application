@@ -37,8 +37,8 @@ function MovieResults() {
           {sampleData.map((movie) => (
             <div
               className="transform transition duration-500 hover:scale-125 hover:flex justify-center items-center"
-              key={movie._id}
-              onClick={() => handleClick(movie._id)}
+              key={movie.title}
+              onClick={() => handleClick(movie.title)}
             >
               <div className="card-body bg-neutral rounded p-4 justify-center">
                 <div className="card-title font-bold justify-center">
