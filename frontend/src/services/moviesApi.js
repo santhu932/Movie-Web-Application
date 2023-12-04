@@ -24,6 +24,7 @@ const getMovieDetail = async (id) => {
   }
 };
 
+
 const searchMovies = async (query) => {
   try {
     const { data } = await axios.get(`${baseURI}/search`, { params: { query } });

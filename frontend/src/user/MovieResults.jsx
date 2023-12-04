@@ -25,10 +25,11 @@ function MovieResults() {
   //   console.log('clicked', id);
   //   navigate(`/movie/${id}`);
   // };
-  // const handleClick = (title) => {
-  //   console.log('clicked', title);
-  //   navigate(`/movie/${encodeURIComponent(title)}`);
-  // };
+  const handleClick = (movie_id) => {
+    console.log('clicked', movie_id);
+    navigate(`/movie/${movie_id}`);
+  };
+  
   
   return (
     <>
