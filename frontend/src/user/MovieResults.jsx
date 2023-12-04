@@ -21,11 +21,15 @@ function MovieResults() {
   };
 
   const navigate = useNavigate();
-  const handleClick = (id) => {
-    console.log('clicked', id);
-    navigate(`/movie/${id}`);
+  // const handleClick = (id) => {
+  //   console.log('clicked', id);
+  //   navigate(`/movie/${id}`);
+  // };
+  const handleClick = (title) => {
+    console.log('clicked', title);
+    navigate(`/movie/${encodeURIComponent(title)}`);
   };
-
+  
   return (
     <>
       <Typography variant="h2" className="text-center" sx={{ my: 2 }}>
