@@ -25,15 +25,15 @@ function MovieResults() {
   //   console.log('clicked', id);
   //   navigate(`/movie/${id}`);
   // };
-  const handleClick = (title) => {
-    console.log('clicked', title);
-    navigate(`/movie/${encodeURIComponent(title)}`);
-  };
+  // const handleClick = (title) => {
+  //   console.log('clicked', title);
+  //   navigate(`/movie/${encodeURIComponent(title)}`);
+  // };
   
   return (
     <>
       <Typography variant="h2" className="text-center" sx={{ my: 2 }}>
-        Top Rated Movies
+        Movies
       </Typography>
       {login && <MovieCarousel />}
       {landing && (
