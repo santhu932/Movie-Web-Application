@@ -8,7 +8,7 @@ const baseURI = 'http://localhost:8080' //using local host
 
 const getHomeMovies = async () => {
   try {
-    const { data } = await axios.get(`${baseURI}home`);
+    const { data } = await axios.get(`${baseURI}/movies`);
     return data;
   } catch (error) {
     console.log('Error occurred!', error);
@@ -17,20 +17,21 @@ const getHomeMovies = async () => {
 
 const getMovieDetail = async (id) => {
   try {
-    const { data } = await axios.get(`${baseURI}movie/${id}`);
+    const { data } = await axios.get(`${baseURI}/movie/${id}`);
     return data;
   } catch (error) {
     console.log('Error occurred!', error);
   }
 };
 
-const searchMovies = async () => {
+const searchMovies = async (query) => {
   try {
-    const { data } = await axios.get(`${baseURI}search`);
+    const { data } = await axios.get(`${baseURI}/search`, { params: { query } });
     return data;
   } catch (error) {
     console.log('Error occurred!', error);
   }
 };
+
 
 export { getHomeMovies, getMovieDetail, searchMovies };
