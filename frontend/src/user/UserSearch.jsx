@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { searchMovies } from '../../services/moviesApi';
+import { searchMovies } from '../services/moviesApi';
 
 function MovieSearch() {
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`/movie/${selectedMovie?.id}`);
+    navigate(`/movie/${selectedMovie?._id}`);
   };
 
   const [selectedMovie, setSelectedMovie] = useState(null);

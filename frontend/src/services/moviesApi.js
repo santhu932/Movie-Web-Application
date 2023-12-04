@@ -44,9 +44,9 @@ const getMovieDetail = async (id) => {
   }
 }
 
-const searchMovies = async (query) => {
+const searchMovies = async () => {
   try {
-    const { data } = await axios.get(`${baseURI}/search`, { params: { query } });
+    const { data } = await axios.get(`${baseURI}/search`);
     return data;
   } catch (error) {
     console.log('Error occurred!', error);

@@ -17,13 +17,15 @@
 import React, { useContext } from 'react';
 import MovieContext from '../context/MovieContext.jsx';
 import MovieResults from '../../user/MovieResults';
+import MovieSearch from '../../user/UserSearch'
 
 function Home() {
-  const { login } = useContext(MovieContext);
+  const { search, login } = useContext(MovieContext);
 
   return (
     <>
       {/* Remove the UserSearch component */}
+      {search && !login && <MovieSearch />}
       <MovieResults />
     </>
   );

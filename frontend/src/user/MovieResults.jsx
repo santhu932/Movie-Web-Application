@@ -4,7 +4,7 @@ import MovieRating from './MovieRating.jsx';
 import MovieCarousel from './MovieCarousel.jsx';
 import { useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
-import noimg from '../components/images/noimg.jpg';
+import noimg from '../components/images/no_poster.jpg';
 import { getHomeMovies } from '../services/moviesApi.js';
 
 function MovieResults() {

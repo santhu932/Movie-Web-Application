@@ -220,7 +220,7 @@ async def get_all_movies():
         collection_users = db["users"]
 
         # Retrieve movies from MongoDB
-        movies_cursor = collection_movies.find().limit(20)
+        movies_cursor = collection_movies.find().sort('imdb_score', -1).limit(20)
         #print(movies_cursor)
         
         movies = await movies_cursor.to_list(length=None)
@@ -276,73 +276,73 @@ async def get_movie(movie_id: str):
 
 from typing import List
 
-@app.get('/top_movies/{n}', response_model=List[MovieResponse])
-async def get_top_movies(n: int):
-    try:
-        if n <= 0:
-            raise HTTPException(status_code=400, detail='Bad request! n should be a positive integer.')
+# @app.get('/top_movies/{n}', response_model=List[MovieResponse])
+# async def get_top_movies(n: int):
+#     try:
+#         if n <= 0:
+#             raise HTTPException(status_code=400, detail='Bad request! n should be a positive integer.')
 
-        client = make_connection()
-        db = client["MovieIndustryAnalysis"]
-        collection_movies = db["movies"]
+#         client = make_connection()
+#         db = client["MovieIndustryAnalysis"]
+#         collection_movies = db["movies"]
 
-        top_movies = await get_top_movies_from_database(collection_movies, n)
+#         top_movies = await get_top_movies_from_database(collection_movies, n)
 
-        if not top_movies:
-            raise HTTPException(status_code=404, detail='Top movies not found')
+#         if not top_movies:
+#             raise HTTPException(status_code=404, detail='Top movies not found')
 
-        response_movies = [
-            MovieResponse(
-                title=movie.get('title'),
-                rating=movie.get('rating'),
-                genre=movie.get('genre'),
-                released_year=movie.get('released_year'),
-                imdb_score=movie.get('imdb_score'),
-                imdb_votes=movie.get('imdb_votes'),
-                director=movie.get('director'),
-                writer=movie.get('writer'),
-                star=movie.get('star'),
-                country=movie.get('country'),
-                budget=movie.get('budget'),
-                revenue=movie.get('revenue'),
-                production_company=movie.get('production_company'),
-                duration=movie.get('duration'),
-                released_date=movie.get('released_date'),
-                released_country=movie.get('released_country'),
-                Poster=movie.get('Poster'),
-            )
-            for movie in top_movies
-        ]
+#         response_movies = [
+#             MovieResponse(
+#                 title=movie.get('title'),
+#                 rating=movie.get('rating'),
+#                 genre=movie.get('genre'),
+#                 released_year=movie.get('released_year'),
+#                 imdb_score=movie.get('imdb_score'),
+#                 imdb_votes=movie.get('imdb_votes'),
+#                 director=movie.get('director'),
+#                 writer=movie.get('writer'),
+#                 star=movie.get('star'),
+#                 country=movie.get('country'),
+#                 budget=movie.get('budget'),
+#                 revenue=movie.get('revenue'),
+#                 production_company=movie.get('production_company'),
+#                 duration=movie.get('duration'),
+#                 released_date=movie.get('released_date'),
+#                 released_country=movie.get('released_country'),
+#                 Poster=movie.get('Poster'),
+#             )
+#             for movie in top_movies
+#         ]
 
-        return response_movies
+#         return response_movies
 
-    except Exception as error:
-        print(error)
-        raise HTTPException(status_code=500, detail=f'Internal server error: {str(error)}')
+#     except Exception as error:
+#         print(error)
+#         raise HTTPException(status_code=500, detail=f'Internal server error: {str(error)}')
 
 
-async def get_top_movies_from_database(collection, n):
-    try:
-        pipeline = [
-            {"$sort": {"imdb_score": -1}},  # Sort by imdb_score in descending order
-            {"$limit": n}  # Limit the number of results to 'n'
-        ]
-        client = make_connection()
-        db = client["MovieIndustryAnalysis"]
-        collection_movies = db["movies"]
+# async def get_top_movies_from_database(collection, n):
+#     try:
+#         pipeline = [
+#             {"$sort": {"imdb_score": -1}},  # Sort by imdb_score in descending order
+#             {"$limit": n}  # Limit the number of results to 'n'
+#         ]
+#         client = make_connection()
+#         db = client["MovieIndustryAnalysis"]
+#         collection_movies = db["movies"]
 
-        top_movies_cursor = await collection_movies.aggregate(pipeline).to_list(length=n)
+#         top_movies_cursor = await collection_movies.aggregate(pipeline).to_list(length=n)
 
-        # Convert ObjectId to str for JSON serialization
-        top_movies = [
-            {**movie, "_id": str(movie["_id"])} for movie in top_movies_cursor
-        ]
+#         # Convert ObjectId to str for JSON serialization
+#         top_movies = [
+#             {**movie, "_id": str(movie["_id"])} for movie in top_movies_cursor
+#         ]
 
-        return top_movies
+#         return top_movies
 
-    except Exception as error:
-        print(f"Error fetching top movies: {error}")
-        raise
+#     except Exception as error:
+#         print(f"Error fetching top movies: {error}")
+#         raise
 
 
 async def append_movie_thumbnail(db_response):
@@ -386,6 +386,35 @@ async def search_movies(query: str):
 
         return response
     except Exception as error:
+        raise HTTPException(status_code=500, detail=f'Internal server error: {str(error)}')
+    
+    
+# @app.get('/search/{query}')
+# async def search_movies(query: str):
+#     try:
+#         client = make_connection()
+#         db = client["MovieIndustryAnalysis"]
+#         collection_movies = db["movies"]
+
+#         # Perform a case-insensitive search using regex
+#         regex_query = {"$regex": f".*{query}.*", "$options": "i"}
+#         movies = await collection_movies.find({"title": regex_query}).to_list(length=None)
+
+#         if not movies:
+#             raise HTTPException(status_code=404, detail='No movies found for the given query')
+
+#         # Transform data for response
+#         response = [{
+#             "_id": str(movie.get('_id')),
+#             "title": movie.get('title'),
+#             "genre": movie.get('genre'),
+#             "released_year": movie.get('released_year'),
+#             "imdb_score": movie.get('imdb_score'),
+#             "Poster": movie.get('Poster'),
+#         } for movie in movies]
+
+#         return response
+#     except Exception as error:
         raise HTTPException(status_code=500, detail=f'Internal server error: {str(error)}')
 
 
