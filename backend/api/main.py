@@ -57,6 +57,9 @@ class loginModel(BaseModel):  # Assuming you have a LoginModel defined
     password: str
     first_name: str
     last_name: str
+class deleteModel(BaseModel):  # Assuming you have a LoginModel defined
+    email: str
+    password: str
 
 class UserResponse(BaseModel):
     message: str
@@ -129,21 +132,19 @@ async def get_users(email: str, password: str):
         traceback.print_exc()  # Print the traceback for detailed error information
         raise HTTPException(status_code=500, detail=f'Internal server error: {str(error)}')
     
-@app.get("/usersDelete", response_model=List[loginModel])
+@app.get("/usersDelete", response_model=dict)
 async def delete_user(email: str, password: str):
     try: 
         if email and password:
                 client = make_connection()
                 db = client["MovieIndustryAnalysis"]
                 collection_users = db["users"]
-                #print("Hi1:", email, password)
-                
-                # Assuming LoginModel has a find_one method
-                result = await collection_users.delete_one({"email": email, "password": password}, {"_id": 0})
-                #print(user)
+
+                result = await collection_users.delete_one({"email": email, "password": password})
+
                 if result.deleted_count > 0:
-                # User deleted successfully
-                    return [{"email": email, "password": password}]
+                    return {'message': 'User deleted Successfully!'}
+
                 else:
                     raise HTTPException(status_code=404, detail="User not found!")
         else:
