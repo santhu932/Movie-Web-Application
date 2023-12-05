@@ -34,8 +34,8 @@ let theme = createTheme({
     },
   },
 });
-const url = 'http://localhost:8080' //using local host
 
+const url = 'http://localhost:8080'; // using local host
 
 const SignIn = () => {
   const { setLogin, setLanding, setSearch } = useContext(MovieContext);
@@ -43,6 +43,10 @@ const SignIn = () => {
   const [open, setOpen] = useState(false);
   const [messageResponse, setMessageResponse] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogType, setDialogType] = useState('updatePassword'); // or 'deleteUser'
+  const [dialogEmail, setDialogEmail] = useState('');
+  const [dialogPassword, setDialogPassword] = useState('');
 
   const [inputs, setInputs] = useState({
     email: '',
@@ -76,8 +80,6 @@ const SignIn = () => {
       setMessageResponse(`${code}: ${response?.data?.message}`);
     }
   };
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogType, setDialogType] = useState('updatePassword'); // or 'deleteUser'
 
   const handleDialogOpen = (type) => {
     setDialogType(type);
@@ -86,14 +88,16 @@ const SignIn = () => {
 
   const handleDialogClose = () => {
     setDialogOpen(false);
+    // Clear the email and password when the dialog is closed
+    setDialogEmail('');
+    setDialogPassword('');
   };
 
   const handleUpdatePassword = async (newPassword) => {
     try {
-      // Replace the placeholder with the actual update password endpoint
       const { status } = await axios.put(`${url}/updatePassword`, {
-        email: inputs.email,
-        password: inputs.password,
+        email: dialogEmail,
+        password: dialogPassword,
         newPassword: newPassword,
       });
       if (status === 200) {
@@ -108,13 +112,11 @@ const SignIn = () => {
   };
 
   const handleDeleteUser = async () => {
-    // Implement logic to delete user
     try {
-      // Replace the placeholder with the actual delete user endpoint
-      const { status } = await axios.delete(`${url}/deleteUser`, {
+      const { status } = await axios.delete(`${url}/usersDelete`, {
         data: {
-          email: inputs.email,
-          password: inputs.password,
+          email: dialogEmail,
+          password: dialogPassword,
         },
       });
       if (status === 200) {
@@ -134,8 +136,6 @@ const SignIn = () => {
     setSearch(false);
     return <Navigate to="/" />;
   }
-
-  
 
   return (
     <ThemeProvider theme={theme}>
@@ -270,6 +270,19 @@ const SignIn = () => {
                       onChange={(e) => setNewPassword(e.target.value)}
                     />
                   )}
+                  <TextField
+                    label="Email"
+                    fullWidth
+                    margin="normal"
+                    onChange={(e) => setDialogEmail(e.target.value)}
+                  />
+                  <TextField
+                    label="Password"
+                    type="password"
+                    fullWidth
+                    margin="normal"
+                    onChange={(e) => setDialogPassword(e.target.value)}
+                  />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleDialogClose}>Cancel</Button>
