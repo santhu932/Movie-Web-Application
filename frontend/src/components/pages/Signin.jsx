@@ -13,12 +13,17 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import movieBackground from '../images/barbie.jpg'; // Update the image path
 import { useState, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import MovieContext from '../context/MovieContext.jsx'
+import MovieContext from '../context/MovieContext.jsx';
 import axios from 'axios';
+import movieBackground from '../images/barbie.jpg'; // Update the image path
+
 let theme = createTheme({
   palette: {
     primary: {
@@ -28,20 +33,14 @@ let theme = createTheme({
       main: '#1f2937',
     },
   },
-})
+});
 
-// Placeholder URL, update this with the actual API endpoint for movie authentication
-  // const url =
-  //   import.meta.env.VITE_APP_ENVIROMENT === 'DEV'
-  //     ? import.meta.env.VITE_LOCAL_URL
-  //     : import.meta.env.VITE_PUBLIC_URL
-  const url = 'http://localhost:8080' //using local host
-
-export default function SignIn() {
+const SignIn = () => {
   const { setLogin, setLanding, setSearch } = useContext(MovieContext);
   const [isauthenticated, setIsauthenticated] = useState(false);
   const [open, setOpen] = useState(false);
   const [messageResponse, setMessageResponse] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   const [inputs, setInputs] = useState({
     email: '',
@@ -82,6 +81,58 @@ export default function SignIn() {
     setSearch(false);
     return <Navigate to="/" />;
   }
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogType, setDialogType] = useState('updatePassword'); // or 'deleteUser'
+
+  const handleDialogOpen = (type) => {
+    setDialogType(type);
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  const handleUpdatePassword = async (newPassword) => {
+    try {
+      // Replace the placeholder with the actual update password endpoint
+      const { status } = await axios.put(`${url}/updatePassword`, {
+        email: inputs.email,
+        password: inputs.password,
+        newPassword: newPassword,
+      });
+      if (status === 200) {
+        setOpen(true);
+        setMessageResponse('Password updated successfully.');
+        handleDialogClose();
+      }
+    } catch ({ code, response }) {
+      setOpen(true);
+      setMessageResponse(`${code}: ${response?.data?.message}`);
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    // Implement logic to delete user
+    try {
+      // Replace the placeholder with the actual delete user endpoint
+      const { status } = await axios.delete(`${url}/deleteUser`, {
+        data: {
+          email: inputs.email,
+          password: inputs.password,
+        },
+      });
+      if (status === 200) {
+        setOpen(true);
+        setMessageResponse('User deleted successfully.');
+        handleDialogClose();
+      }
+    } catch ({ code, response }) {
+      setOpen(true);
+      setMessageResponse(`${code}: ${response?.data?.message}`);
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -176,6 +227,61 @@ export default function SignIn() {
               >
                 Sign In
               </Button>
+
+              {/* Update Password Button */}
+              <Button
+                fullWidth
+                variant="outlined"
+                sx={{ mt: 1, mb: 2 }}
+                onClick={() => handleDialogOpen('updatePassword')}
+              >
+                Update Password
+              </Button>
+
+              {/* Delete User Button */}
+              <Button
+                fullWidth
+                variant="outlined"
+                sx={{ mb: 2 }}
+                onClick={() => handleDialogOpen('deleteUser')}
+              >
+                Delete User
+              </Button>
+
+              {/* Dialog for Update Password or Delete User */}
+              <Dialog open={dialogOpen} onClose={handleDialogClose}>
+                <DialogTitle>
+                  {dialogType === 'updatePassword'
+                    ? 'Update Password'
+                    : 'Delete User'}
+                </DialogTitle>
+                <DialogContent>
+                  {/* Add input fields for password update or confirmation for user deletion */}
+                  {/* For example, input for new password if updating password */}
+                  {dialogType === 'updatePassword' && (
+                    <TextField
+                      label="New Password"
+                      type="password"
+                      fullWidth
+                      margin="normal"
+                      onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                  )}
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleDialogClose}>Cancel</Button>
+                  <Button
+                    onClick={() =>
+                      dialogType === 'updatePassword'
+                        ? handleUpdatePassword(newPassword)
+                        : handleDeleteUser()
+                    }
+                  >
+                    {dialogType === 'updatePassword' ? 'Update' : 'Delete'}
+                  </Button>
+                </DialogActions>
+              </Dialog>
+
               <Grid container>
                 <Grid item>
                   <Link href="/signup" variant="body2">
@@ -189,4 +295,6 @@ export default function SignIn() {
       </Grid>
     </ThemeProvider>
   );
-}
+};
+
+export default SignIn;
