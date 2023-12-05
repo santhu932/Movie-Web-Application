@@ -34,6 +34,8 @@ let theme = createTheme({
     },
   },
 });
+const url = 'http://localhost:8080' //using local host
+
 
 const SignIn = () => {
   const { setLogin, setLanding, setSearch } = useContext(MovieContext);
@@ -74,14 +76,6 @@ const SignIn = () => {
       setMessageResponse(`${code}: ${response?.data?.message}`);
     }
   };
-
-  if (isauthenticated) {
-    setLogin(false);
-    setLanding(true);
-    setSearch(false);
-    return <Navigate to="/" />;
-  }
-
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogType, setDialogType] = useState('updatePassword'); // or 'deleteUser'
 
@@ -133,6 +127,15 @@ const SignIn = () => {
       setMessageResponse(`${code}: ${response?.data?.message}`);
     }
   };
+
+  if (isauthenticated) {
+    setLogin(false);
+    setLanding(true);
+    setSearch(false);
+    return <Navigate to="/" />;
+  }
+
+  
 
   return (
     <ThemeProvider theme={theme}>
