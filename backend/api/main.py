@@ -89,25 +89,7 @@ async def add_user(user: UserCreate):
         #pass
         raise HTTPException(status_code=402, detail=f'Error while trying to parse the req body: {str(e)}')
         # raise HTTPException(status_code=402, detail=f'Error while trying to parse the req body: {str(e)}')
-
-# @app.post('/validate', response_model=dict)
-# async def validate_user(user: UserValidate):
-#     try:
-#         client = make_connection()
-#         collection_users = client["MovieIndustryAnalysis"]["users"]
-
-#         login_user = await collection_users.find_one({'email': user.email})
-
-#         if not login_user:
-#             raise HTTPException(status_code=401, detail='Invalid email or password!')
-#         else:
-#             # Exclude the password from the response for security reasons
-#             # login_user.pop('password', None)
-#             return {'message': 'Login Successful!', 'loginUser': login_user}
-
-#     except Exception as e:
-#         # Catch any other exceptions and raise 402 Payment Required
-#         raise HTTPException(status_code=402, detail=f'Error while trying to parse the req body: {str(e)}')
+        
 
 @app.get("/users", response_model=List[loginModel])
 async def get_users():
@@ -144,6 +126,57 @@ async def get_users(email: str, password: str):
             raise HTTPException(status_code=400, detail="Email or Password missing!")
     except Exception as error:
         print(f"Error in get_users: {error}")
+        traceback.print_exc()  # Print the traceback for detailed error information
+        raise HTTPException(status_code=500, detail=f'Internal server error: {str(error)}')
+    
+@app.get("/usersDelete", response_model=List[loginModel])
+async def delete_user(email: str, password: str):
+    try: 
+        if email and password:
+                client = make_connection()
+                db = client["MovieIndustryAnalysis"]
+                collection_users = db["users"]
+                #print("Hi1:", email, password)
+                
+                # Assuming LoginModel has a find_one method
+                result = await collection_users.delete_one({"email": email, "password": password}, {"_id": 0})
+                #print(user)
+                if result.deleted_count > 0:
+                # User deleted successfully
+                    return [{"email": email, "password": password}]
+                else:
+                    raise HTTPException(status_code=404, detail="User not found!")
+        else:
+            raise HTTPException(status_code=400, detail="Email or Password missing!")
+    except Exception as error:
+        print(f"Error in get_users: {error}")
+        traceback.print_exc()  # Print the traceback for detailed error information
+        raise HTTPException(status_code=500, detail=f'Internal server error: {str(error)}')
+    
+@app.get("/updatePassword", response_model=List[loginModel])
+async def update_Password(email: str, current_password: str, new_password: str):
+    try: 
+        if email and current_password and new_password:
+                client = make_connection()
+                db = client["MovieIndustryAnalysis"]
+                collection_users = db["users"]
+                print(email, new_password, current_password)
+                # Assuming LoginModel has a find_one method
+                user = await collection_users.find_one_and_update(
+                    {"email": 'example@gmail.com', "password": 'example2022'},
+                    {"$set": {"password": 'example2023'}},
+                    projection={"_id": False},
+                    return_document=True
+                )
+                print(user)
+                if user:
+                    return [user]
+                else:
+                    raise HTTPException(status_code=401, detail="Invalid email or current password!")
+        else:
+            raise HTTPException(status_code=400, detail="Email, current password, or new password missing!")
+    except Exception as error:
+        print(f"Error in update_password: {error}")
         traceback.print_exc()  # Print the traceback for detailed error information
         raise HTTPException(status_code=500, detail=f'Internal server error: {str(error)}')
 
