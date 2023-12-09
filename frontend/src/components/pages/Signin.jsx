@@ -35,7 +35,11 @@ let theme = createTheme({
   },
 });
 
-const url = 'http://localhost:8080'; // using local host
+const url =
+import.meta.env.VITE_APP_ENVIROMENT === 'DEV'
+  ? import.meta.env.VITE_LOCAL_URL
+  : import.meta.env.VITE_PUBLIC_URL
+// const url = 'http://localhost:8080'; // using local host
 
 const SignIn = () => {
   const { setLogin, setLanding, setSearch } = useContext(MovieContext);
