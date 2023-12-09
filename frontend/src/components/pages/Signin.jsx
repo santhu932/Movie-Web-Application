@@ -35,10 +35,11 @@ let theme = createTheme({
   },
 });
 
-const url =
-import.meta.env.VITE_APP_ENVIROMENT === 'DEV'
-  ? import.meta.env.VITE_LOCAL_URL
-  : import.meta.env.VITE_PUBLIC_URL
+// const url =
+//   import.meta.env.VITE_APP_ENVIRONMENT === 'DEV'
+//     ? import.meta.env.VITE_LOCAL_URL
+//     : import.meta.env.VITE_PUBLIC_URL
+const url = 'https://adt-project-backend.onrender.com';
 // const url = 'http://localhost:8080'; // using local host
 
 const SignIn = () => {
@@ -51,7 +52,7 @@ const SignIn = () => {
   const [dialogType, setDialogType] = useState('updatePassword'); // or 'deleteUser'
   const [dialogEmail, setDialogEmail] = useState('');
   const [dialogPassword, setDialogPassword] = useState('');
-
+  
   const [inputs, setInputs] = useState({
     email: '',
     password: '',

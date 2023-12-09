@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-const baseURI =
-  import.meta.env.VITE_APP_ENVIROMENT === 'DEV'
-    ? import.meta.env.VITE_LOCAL_URL
-    : import.meta.env.VITE_PUBLIC_URL;
+// const baseURI =
+//     import.meta.env.VITE_APP_ENVIRONMENT === 'DEV'
+//       ? import.meta.env.VITE_LOCAL_URL
+//       : import.meta.env.VITE_PUBLIC_URL
+const baseURI = 'https://adt-project-backend.onrender.com'
 // const baseURI = 'http://localhost:8080' //using local host    
 
 const getHomeMovies = async () => {

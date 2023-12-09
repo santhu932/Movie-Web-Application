@@ -37,10 +37,11 @@ export default function SignUp() {
   const [messageResponse, setMessageResponse] = useState('')
 
   // const url =
-  //   import.meta.env.VITE_APP_ENVIROMENT === 'DEV'
+  //   import.meta.env.VITE_APP_ENVIRONMENT === 'DEV'
   //     ? import.meta.env.VITE_LOCAL_URL
   //     : import.meta.env.VITE_PUBLIC_URL
-  const url = 'http://localhost:8080'
+  // const url = 'http://localhost:8080'
+  const url = 'https://adt-project-backend.onrender.com'
 
   const handleSubmit = async (event) => {
     event.preventDefault()
