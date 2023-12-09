@@ -6,12 +6,12 @@ import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
-import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
-import ScoreSharpIcon from '@mui/icons-material/ScoreSharp';
+import MovieIcon from '@mui/icons-material/Movie';  // Changed icon to MovieIcon
 import '../../Dash.css';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getMovieDetail } from '../../services/moviesApi.js';
+import MovieVisualization from '../../charts/columns';
 
 export default function Details() {
   const { id } = useParams();
@@ -52,7 +52,7 @@ export default function Details() {
               <Card sx={{ height: '9vh' }} className="gradinet">
                 <Stack spacing={2} direction="row">
                   <div className="iconstyle">
-                    <SportsEsportsIcon />
+                    <MovieIcon />  {/* Changed icon to MovieIcon */}
                   </div>
                   <div className="paddingall">
                     <span className="pricesubtitle">Genre</span>
@@ -64,7 +64,7 @@ export default function Details() {
               <Card sx={{ height: '9vh' }} className="gradinetlight">
                 <Stack spacing={2} direction="row">
                   <div className="iconstyle">
-                    <SportsEsportsIcon />
+                    <MovieIcon />  {/* Changed icon to MovieIcon */}
                   </div>
                   <div className="paddingall">
                     <span className="pricesubtitle">Released Year</span>
@@ -76,7 +76,7 @@ export default function Details() {
               <Card sx={{ height: '9vh' }} className="gradinetdark">
                 <Stack spacing={2} direction="row">
                   <div className="iconstyle">
-                    <SportsEsportsIcon />
+                    <MovieIcon />  {/* Changed icon to MovieIcon */}
                   </div>
                   <div className="paddingall">
                     <span className="pricesubtitle">IMDb Score</span>
@@ -85,55 +85,7 @@ export default function Details() {
                   </div>
                 </Stack>
               </Card>
-              <Stack spacing={2} direction="row">
-                <Card sx={{ minWidth: '49%' }} className="gradinet">
-                  <CardContent>
-                    <div className="iconstyle1">
-                      <ScoreSharpIcon />
-                    </div>
-                    <Typography
-                      gutterBottom
-                      variant="h5"
-                      component="div"
-                      sx={{ color: '#ffffff' }}
-                    >
-                      {movieDetail.User_Score}
-                    </Typography>
-                    <Typography
-                      gutterBottom
-                      variant="body2"
-                      component="div"
-                      sx={{ color: '#ccd1d1' }}
-                    >
-                      User Rating
-                    </Typography>
-                  </CardContent>
-                </Card>
-                <Card sx={{ minWidth: '49%' }} className="gradinetlight">
-                  <CardContent>
-                    <div className="iconstyle1">
-                      {' '}
-                      <ScoreSharpIcon />
-                    </div>
-                    <Typography
-                      gutterBottom
-                      variant="h5"
-                      component="div"
-                      sx={{ color: '#ffffff' }}
-                    >
-                      {movieDetail.Critic_Score}
-                    </Typography>
-                    <Typography
-                      gutterBottom
-                      variant="body2"
-                      component="div"
-                      sx={{ color: '#ccd1d1' }}
-                    >
-                      Critic Rating
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Stack>
+              <MovieVisualization movie={movieDetail} />
             </Stack>
           </Grid>
         </Grid>

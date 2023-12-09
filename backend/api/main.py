@@ -164,8 +164,8 @@ async def update_Password(email: str, current_password: str, new_password: str):
                 print(email, new_password, current_password)
                 # Assuming LoginModel has a find_one method
                 user = await collection_users.find_one_and_update(
-                    {"email": 'example@gmail.com', "password": 'example2022'},
-                    {"$set": {"password": 'example2023'}},
+                    {"email": email, "password": current_password},
+                    {"$set": {"password": new_password}},
                     projection={"_id": False},
                     return_document=True
                 )

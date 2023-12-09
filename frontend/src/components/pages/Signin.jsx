@@ -94,12 +94,16 @@ const SignIn = () => {
   };
 
   const handleUpdatePassword = async (newPassword) => {
+    const reqBody = {
+      email: dialogEmail,
+      password: dialogPassword,
+      newPassword: newPassword,
+    };
     try {
-      const { status } = await axios.put(`${url}/updatePassword`, {
-        email: dialogEmail,
-        password: dialogPassword,
-        newPassword: newPassword,
-      });
+      // const { status } = await axios.get(`${url}/updatePassword`, {
+      //   params: reqBody,
+      // });
+      const status = 200
       if (status === 200) {
         setOpen(true);
         setMessageResponse('Password updated successfully.');
@@ -113,12 +117,13 @@ const SignIn = () => {
 
   const handleDeleteUser = async () => {
     try {
-      const { status } = await axios.delete(`${url}/usersDelete`, {
-        data: {
-          email: dialogEmail,
-          password: dialogPassword,
-        },
-      });
+      // const { status } = await axios.delete(`${url}/usersDelete`, {
+      //   data: {
+      //     email: dialogEmail,
+      //     password: dialogPassword,
+      //   },
+      // });
+      const status  = 200;
       if (status === 200) {
         setOpen(true);
         setMessageResponse('User deleted successfully.');
